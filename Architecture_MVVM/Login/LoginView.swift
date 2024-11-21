@@ -24,6 +24,7 @@ class LoginView: UIViewController {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.borderStyle = .roundedRect
+        textField.isSecureTextEntry = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -43,13 +44,23 @@ class LoginView: UIViewController {
         
         return button
     }()
+    
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+            label.text = ""
+            label.numberOfLines = 0
+            label.textColor = .red
+            label.font = .systemFont(ofSize: 20, weight: .regular, width: .condensed)
+            label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         //Crear Binding
         createBindingViewWithViewModel()
         // Agregar las subvistas a la vista.
-        [emailTextField, passwordTextField,loginButton].forEach(view.addSubview)
+        [emailTextField, passwordTextField,loginButton,errorLabel].forEach(view.addSubview)
         // Agregar constrains para visualizar correctamente las subvistas.
         NSLayoutConstraint.activate([
             
@@ -65,6 +76,9 @@ class LoginView: UIViewController {
             
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20)
         ])
         
     }
@@ -81,6 +95,28 @@ class LoginView: UIViewController {
         passwordTextField.textPublisher
             .assign(to: \LoginViewModel.password, on: loginViewModel)
             .store(in: &cancellables)
+        //Se conecta a la propiedad $isEnabled de viewModel con .isEnabled de la subvista : loginButton
+        loginViewModel.$isEnabled
+            .assign(to: \.isEnabled , on: loginButton)
+            .store(in: &cancellables)
+        
+        //Se conecta la proiedad $showLoading de viewModel con .configuration de la subvista: loginButton
+        loginViewModel.$showLoading
+            .assign(to: \.configuration!.showsActivityIndicator, on: loginButton)
+            .store(in: &cancellables)
+        
+        //Se conecta la proiedad $errorMessage de viewModel con UILabel.text de la subvista: errorLabel
+        loginViewModel.$errorMessage
+            .assign(to: \UILabel.text!, on: errorLabel)
+            .store(in: &cancellables)
+        
+        //Navegación : Se conecta userModel y cuando hay un cambio el se ejecuta .sink y la logica que tenga dentro.
+        loginViewModel.$userModel.sink { [weak self] _ in
+            print("Navegación correcta hacía HomeView")
+            let homeView = HomeView()
+            self?.present(homeView, animated: true)
+        }.store(in: &cancellables)
+            
     }
 
 
