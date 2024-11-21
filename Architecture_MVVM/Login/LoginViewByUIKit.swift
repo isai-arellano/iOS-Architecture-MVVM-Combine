@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LoginViewByUIKit.swift
 //  Architecture_MVVM
 //
 //  Created by Isaí Arellano on 20/11/24.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class LoginView: UIViewController {
+class LoginViewByUIKit: UIViewController {
     private let loginViewModel = LoginViewModel(apiClient: APIClient())
     var cancellables = Set<AnyCancellable>()
     

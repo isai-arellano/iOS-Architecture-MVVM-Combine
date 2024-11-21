@@ -7,8 +7,8 @@
 
 import Foundation
 import Combine
-
-class LoginViewModel {
+//Cuando se utiliza SwiftUI, tenemos que agregarle : ObservableObject al ViewModel para que pueda ser observado por la vista.
+class LoginViewModel: ObservableObject {
     //Binding
     @Published var email = ""
     @Published var password = ""
@@ -16,6 +16,9 @@ class LoginViewModel {
     @Published var showLoading = false
     @Published var errorMessage = ""
     @Published var userModel: User?
+    
+    //Navegación implementada con SwiftUI
+    @Published var pathNavigation: [String] = []
     
     var cancellables = Set<AnyCancellable>()
     
@@ -59,6 +62,8 @@ class LoginViewModel {
         Task {
             do {
                 userModel = try await apiClient.login(withEmail: email, password: password)
+                //Navegación implementada con SwiftUI:
+                pathNavigation.append("home")
             } catch let error as BackendError {
                 errorMessage = error.rawValue
                 print(error.localizedDescription)

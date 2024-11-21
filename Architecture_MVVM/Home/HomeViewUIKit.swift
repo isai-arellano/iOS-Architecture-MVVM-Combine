@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  HomeViewUIKit.swift
 //  Architecture_MVVM
 //
 //  Created by Isaí Arellano on 21/11/24.
@@ -8,20 +8,17 @@
 import Foundation
 import UIKit
 
-class HomeView: UIViewController {
+class HomeViewUIKit: UIViewController {
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 40, weight: .bold, width: .standard)
-        label.text = "Bienvenid@!"
+        label.text = "Hola desde UIKit"
         return label
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .blue
         view.addSubview(messageLabel)
         
         NSLayoutConstraint.activate([
