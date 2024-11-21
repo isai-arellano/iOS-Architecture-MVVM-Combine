@@ -21,8 +21,8 @@ final class APIClient {
 
 //Backend:
 func simulateBackendLogin(email: String, password: String) throws -> User {
-    guard email == "isaia@arellano.com" else {
-        print("El user no es isaia@arellano.com")
+    guard email == "isai@arellano.com" else {
+        print("El user no es isai@arellano.com")
         throw BackendError.invalidEmail
     }
     
